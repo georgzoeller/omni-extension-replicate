@@ -241,7 +241,8 @@ const script = {
 
     await ctx.app.sendMessageToSession(
       ctx.sessionId,
-      'Created a block for this model.',
+      'Created a block for this model.'
+      + (b.description ? `\n<br>Description: ${b.description}` : ''),
       'text/markdown',
       {
         commands: [

@@ -32,19 +32,18 @@
       </div>
       <div class="content">
       <p>
-        This extension allows any AI model found on <a href='https://replicate.com/explore'>replicate.com</a>.
+        This extension allows any AI model found on <a href='https://replicate.com/explore'>replicate.com</a> to be used as a block within Omnitool.
       </p>
-      <label><b>Model</b></label>
 
-      <div><small>Please select a collection to install:</small></div>
+      <div><small>Choose a model collection to install:</small></div>
       <ul>
-      <li><button type="button" onclick="addFavButton('images')">Image Utilities Collection</button>- <small>Image Generation Essentials</small></li>
+      <li><button type="button" onclick="addFavButton('images')">Image Utilities Collection</button> - <small>Image Generation Essentials</small></li>
       <li><button type="button" onclick="addFavButton('SD15')">Stable Diffusion 1.5 Collection</button> - <small>Image Generation and Controlnet</small></li>
       <li><button type="button" onclick="addFavButton('SDXL')">Stable Diffusion XL Collection</button> - <small>Image Generation and Finetunes</small></li>
+      <li><button type="button" onclick="addFavButton('LLM')">Large Language Model (LLM) Collection</button> - <small>Text Generation</small></li>
 
       </ul>
-      <p><small>or</small></p>
-      <div><small>Enter Replicate model URL (e.g. https://replicate.com/stability-ai/sdxl) or a valid Model owner and name in the format: owner/modelName, for example <b>stability-ai/sdxl</b></small></div>
+      <div><small>Or install a single Replicate model. Use the URL (e.g. https://replicate.com/stability-ai/sdxl) or a valid Model owner and name in the format: owner/modelName, for example <b>stability-ai/sdxl</b></small></div>
       </div>
 
       <div>
@@ -53,7 +52,7 @@
 
       <button type="button" onclick="addButton()">Add Model To Omnitool</button>
       <p></p>
-      <div><small>After adding the model it can be found in the block manager.</small></div>
+      <div><small>After adding models, they can be found in the block manager.</small></div>
 
       <textarea id="result" style="height: 400px; width: 95%; overflow-y: scroll;">
 
@@ -97,19 +96,69 @@
 
         if (type === 'SDXL')
         {
-          runExtensionScript('replicate', ['stability-ai/sdxl', 'fofr/sdxl-emoji', 'fofr/sdxl-barbie', 'pwntus/sdxl-gta-v', 'jakedahn/sdxl-70s-scifi', 'davidbarker/sdxl-polaroid', 'cbh123/sdxl-money','nandycc/sdxl-app-icons'])
+          runExtensionScript('replicate', `
+            cbh123/sdxl-money,
+            davidbarker/sdxl-polaroid,
+            doriandarko/sdxl-hiroshinagai,
+            fofr/sdxl-emoji,
+            fofr/sdxl-barbie,
+            fofr/sdxl-tron,
+            jakedahn/sdxl-70s-scifi,
+            lucataco/sdxl-clip-interrogator,
+            lucataco/sdxl-panoramic,
+            nandycc/sdxl-app-icons,
+            pwntus/sdxl-gta-v,
+            stability-ai/sdxl,
+            `.split(',').map(s => s.trim()).filter(Boolean))
         }
         else if (type === 'SD15')
         {
-          runExtensionScript('replicate', ['stability-ai/stable-diffusion', 'arielreplicate/paella_fast_outpainting', 'cjwbw/stable-diffusion-high-resolution', 'andreasjansson/stable-diffusion-inpainting', 'rossjillian/controlnet', 'logerzhu/ad-inpaint', 'andreasjansson/qrcode', 'paappraiser/retro-coloring-book'])
-
+          runExtensionScript('replicate', `
+            22-hours/vintedois-diffusion,
+            andreasjansson/illusion,
+            andreasjansson/qrcode,
+            andreasjansson/stable-diffusion-inpainting,
+            arielreplicate/paella_fast_outpainting,
+            cjwbw/analog-diffusion,
+            cjwbw/stable-diffusion-high-resolution,
+            cjwbw/vq-diffusion,
+            cjwbw/magifactory-t-shirt-diffusion,
+            logerzhu/ad-inpaint,
+            rossjillian/controlnet,
+            stability-ai/stable-diffusion,
+            tommoore515/material_stable_diffusion,
+            tstramer/archer-diffusion,
+          `.split(',').map(s => s.trim()).filter(Boolean))
         }
         else if (type === 'images')
         {
-          runExtensionScript('replicate', ['cjwbw/rembg', 'andreasjansson/deepfloyd-if', 'hassamdevsy/mask2former', 'stphtan94117/auto-remove-anything', 'stphtan94117/auto-blurring-of-faces-and-license_plates', 'tencentarc/gfpgan', 'sczhou/codeformer', 'arielreplicate/deoldify_image', 'lucataco/faceswap', 'nightmareai/real-esrgan', 'jingyunliang/swinir', 'mv-lab/swin2sr', 'nightmareai/latent-sr', 'tencentarc/gfpgan', 'microsoft/bringing-old-photos-back-to-life', 'rmokady/clip_prefix_caption'])
+          runExtensionScript('replicate', `
+            andreasjansson/deepfloyd-if,
+            arielreplicate/deoldify_image,
+            cjwbw/rembg,
+            hassamdevsy/mask2former,
+            jingyunliang/swinir,
+            lucataco/faceswap,
+            microsoft/bringing-old-photos-back-to-life,
+            mv-lab/swin2sr,
+            nightmareai/real-esrgan,
+            nightmareai/latent-sr,
+            rmokady/clip_prefix_caption,
+            sczhou/codeformer,
+            stphtan94117/auto-remove-anything,
+            stphtan94117/auto-blurring-of-faces-and-license_plates,
+            tencentarc/gfpgan,
+          `.split(',').map(s => s.trim()).filter(Boolean))
+        }
+        else if (type === 'LLM')
+        {
+          runExtensionScript('replicate', `
+            meta/llama-2-7b-chat,
+            meta/llama-2-13b-chat,
+            meta/llama-2-70b-chat,
+          `.split(',').map(s => s.trim()).filter(Boolean))
         }
       }
-
 
       const addButton = async function()
       {
