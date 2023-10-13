@@ -53,11 +53,44 @@ const script = {
     let schema = raw_schema;
     const components = schema.components;
 
+    function appendDescription(inputs, replicateModel) {
+      // Check for required keys in inputs.properties
+      const requiredKeys = ['width', 'height', 'Seed', 'prompt'];
+      const hasRequiredKeys = requiredKeys.every(key =>
+        Object.keys(inputs.properties).some(prop => prop.toLowerCase() === key.toLowerCase())
+      );
+      
+      if (!hasRequiredKeys) return replicateModel.description;
+      
+      // Check for "xl" in replicateModel.name or replicateModel.description
+      const hasXL = replicateModel.name.toLowerCase().includes('xl') || replicateModel.description.toLowerCase().includes('xl');
+
+      if (!hasXL) return replicateModel.description;
+      
+      // Additional message to append
+      const additionalMessage = 
+      `
+        ***Tips:***
+
+        *For optimal performance on the SDXL model, ensure to use **1024x1024** or others with the same pixel count but varying aspect ratios:*
+        
+        - **1024 x 1024** (1:1)
+        - **1152 x 896** (9:7), **896 x 1152** (7:9)
+        - **1216 x 832** (19:13), **832 x 1216** (13:19)
+        - **1344 x 768** (7:4), **768 x 1344** (4:7)
+        - **1536 x 640** (12:5), **640 x 1536** (5:12)
+      `;
+      
+      return `${replicateModel.description}\n${additionalMessage}`;
+    }
+
+    const modifiedDescription = appendDescription(components.schemas.Input, replicateModel);
+
     const component = ctx.app.blocks.BaseComponent.create(
       'omni-extension-replicate:run', replicateModel.owner + '/' + replicateModel.name, '_' + latest_version.id
     )
       .fromScratch()
-      .set('description', replicateModel.description)
+      .set('description', modifiedDescription)
       .set('title', `Replicate: ${replicateModel.owner}/${replicateModel.name}`)
       //.set('category', 'Security')
       .setMeta({
