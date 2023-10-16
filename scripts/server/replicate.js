@@ -183,12 +183,17 @@ const script = {
       let defaultV = (replicateModel.default_example?.input?.[key] || input.default) ?? input.default;
 
       const ip = component
-      .createInput(key, input.type, customSocket, customSocketOptions)
-      .set('description', input.description)
-      .setDefault(defaultV)
-      .setConstraints(input.minimum,input.maximum, input.step)
-      .set('title', input.title)
-      .setRequired(inputs.required?.includes?.(key))
+        .createInput(key, input.type, customSocket, customSocketOptions)
+        .set('description', input.description);
+
+      // Do not set default value when it is not a required image 
+      if (!(customSocket === 'image' && !inputs.required?.includes?.(key))) {
+        ip.setDefault(defaultV);
+      }
+
+      ip.setConstraints(input.minimum,input.maximum, input.step)
+        .set('title', input.title)
+        .setRequired(inputs.required?.includes?.(key));
 
       if (input.choices?.length) {
         ip.setChoices(input.choices, defaultV)
